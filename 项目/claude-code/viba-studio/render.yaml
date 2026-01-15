@@ -3,6 +3,7 @@ services:
     name: viba-studio-api
     env: node
     plan: free
+    rootDir: .
     buildCommand: cd backend && npm install
     startCommand: cd backend && npm run build && npm start
     envVars:
