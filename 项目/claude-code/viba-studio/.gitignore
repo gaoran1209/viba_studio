@@ -32,6 +32,12 @@ backend/.env
 .env
 .env.local
 .env.production
+.env.render
+.env.vercel
+
+# Deployment files
+.vercel
+railway.json
 
 # Docker
 *.dockerignore
