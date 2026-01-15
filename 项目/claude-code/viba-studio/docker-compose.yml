@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # PostgreSQL 数据库
+  db:
+    image: postgres:14-alpine
+    container_name: viba-postgres
+    environment:
+      POSTGRES_DB: viba_studio
+      POSTGRES_USER: viba
+      POSTGRES_PASSWORD: viba_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U viba"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 后端 API
+  backend:
+    build: ./backend
+    container_name: viba-backend
+    environment:
+      PORT: 3001
+      NODE_ENV: production
+      DATABASE_URL: postgresql://viba:viba_password@db:5432/viba_studio
+      JWT_SECRET: change-this-to-random-secret-in-production
+      JWT_REFRESH_SECRET: change-this-to-random-refresh-secret-in-production
+      FRONTEND_URL: http://localhost:3000
+    ports:
+      - "3001:3001"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # 前端
+  frontend:
+    build: .
+    container_name: viba-frontend
+    environment:
+      VITE_API_URL: http://localhost:3001
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
