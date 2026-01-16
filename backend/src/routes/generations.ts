@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import { Generation, GenerationType, GenerationStatus } from '../models/Generation';
 import { authMiddleware, AuthRequest } from '../middleware/auth';
 import { Op } from 'sequelize';
@@ -6,7 +6,7 @@ import { Op } from 'sequelize';
 const router = Router();
 
 // 获取当前用户的生成历史
-router.get('/', authMiddleware, async (req: AuthRequest, res, next) => {
+router.get('/', authMiddleware, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { type, limit = '20', offset = '0' } = req.query;
 
@@ -33,7 +33,7 @@ router.get('/', authMiddleware, async (req: AuthRequest, res, next) => {
 });
 
 // 获取单个生成记录详情
-router.get('/:id', authMiddleware, async (req: AuthRequest, res, next) => {
+router.get('/:id', authMiddleware, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const generation = await Generation.findOne({
       where: {
@@ -53,7 +53,7 @@ router.get('/:id', authMiddleware, async (req: AuthRequest, res, next) => {
 });
 
 // 创建生成记录
-router.post('/', authMiddleware, async (req: AuthRequest, res, next) => {
+router.post('/', authMiddleware, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { type, input_images, parameters } = req.body;
 
@@ -79,7 +79,7 @@ router.post('/', authMiddleware, async (req: AuthRequest, res, next) => {
 });
 
 // 更新生成记录状态
-router.put('/:id', authMiddleware, async (req: AuthRequest, res, next) => {
+router.put('/:id', authMiddleware, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const generation = await Generation.findOne({
       where: {
@@ -111,7 +111,7 @@ router.put('/:id', authMiddleware, async (req: AuthRequest, res, next) => {
 });
 
 // 删除生成记录
-router.delete('/:id', authMiddleware, async (req: AuthRequest, res, next) => {
+router.delete('/:id', authMiddleware, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const generation = await Generation.findOne({
       where: {

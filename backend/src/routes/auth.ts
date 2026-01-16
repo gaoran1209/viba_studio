@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { AuthService } from '../services/auth.service';
 import { authMiddleware } from '../middleware/auth';
 import { AuthRequest } from '../types';
@@ -6,7 +6,7 @@ import { AuthRequest } from '../types';
 const router = Router();
 
 // 注册
-router.post('/register', async (req, res, next) => {
+router.post('/register', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password, full_name } = req.body;
 
@@ -29,7 +29,7 @@ router.post('/register', async (req, res, next) => {
 });
 
 // 登录
-router.post('/login', async (req, res, next) => {
+router.post('/login', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
 
@@ -48,7 +48,7 @@ router.post('/login', async (req, res, next) => {
 });
 
 // 刷新 token
-router.post('/refresh', async (req, res, next) => {
+router.post('/refresh', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { refresh_token } = req.body;
 
@@ -67,7 +67,7 @@ router.post('/refresh', async (req, res, next) => {
 });
 
 // 登出（可选，前端直接删除 token 即可）
-router.post('/logout', authMiddleware, (req: AuthRequest, res) => {
+router.post('/logout', authMiddleware, (req: AuthRequest, res: Response) => {
   // 在实际应用中，可能需要将 token 加入黑名单
   res.json({ message: 'Successfully logged out' });
 });

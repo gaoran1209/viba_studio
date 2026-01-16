@@ -1,11 +1,11 @@
-import { Router } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import { User } from '../models/User';
 import { authMiddleware, AuthRequest } from '../middleware/auth';
 
 const router = Router();
 
 // 获取当前用户信息
-router.get('/me', authMiddleware, async (req: AuthRequest, res, next) => {
+router.get('/me', authMiddleware, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const user = await User.findByPk(req.user!.id);
     if (!user) {
@@ -18,7 +18,7 @@ router.get('/me', authMiddleware, async (req: AuthRequest, res, next) => {
 });
 
 // 更新用户信息
-router.put('/me', authMiddleware, async (req: AuthRequest, res, next) => {
+router.put('/me', authMiddleware, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const user = await User.findByPk(req.user!.id);
     if (!user) {
@@ -38,7 +38,7 @@ router.put('/me', authMiddleware, async (req: AuthRequest, res, next) => {
 });
 
 // 删除账户
-router.delete('/me', authMiddleware, async (req: AuthRequest, res, next) => {
+router.delete('/me', authMiddleware, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const user = await User.findByPk(req.user!.id);
     if (!user) {
