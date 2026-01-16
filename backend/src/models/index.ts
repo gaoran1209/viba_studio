@@ -6,6 +6,10 @@ import { Generation } from './Generation';
 const sequelizeOptions: Options = {
   dialect: 'postgres',
   logging: config.nodeEnv === 'development' ? console.log : false,
+  dialectOptions: {
+    // Force IPv4
+    family: 4,
+  },
   define: {
     underscored: true,
   },
@@ -13,6 +17,7 @@ const sequelizeOptions: Options = {
 
 if (config.nodeEnv === 'production') {
   sequelizeOptions.dialectOptions = {
+    ...sequelizeOptions.dialectOptions,
     ssl: {
       require: true,
       rejectUnauthorized: false,
