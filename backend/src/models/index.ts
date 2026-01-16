@@ -1,15 +1,26 @@
-import { Sequelize } from 'sequelize';
+import { Sequelize, Options } from 'sequelize';
 import { config } from '../config';
 import { User } from './User';
 import { Generation } from './Generation';
 
-export const sequelize = new Sequelize(config.database.url, {
+const sequelizeOptions: Options = {
   dialect: 'postgres',
   logging: config.nodeEnv === 'development' ? console.log : false,
   define: {
     underscored: true,
   },
-});
+};
+
+if (config.nodeEnv === 'production') {
+  sequelizeOptions.dialectOptions = {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  };
+}
+
+export const sequelize = new Sequelize(config.database.url, sequelizeOptions);
 
 export { User, Generation };
 

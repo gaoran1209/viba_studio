@@ -1,3 +1,11 @@
+import dns from 'node:dns';
+// Force IPv4 for Supabase connection compatibility on Render
+try {
+  dns.setDefaultResultOrder('ipv4first');
+} catch (error) {
+  // Ignore error for older Node versions
+}
+
 import express from 'express';
 import cors from 'cors';
 import { config } from './config';
